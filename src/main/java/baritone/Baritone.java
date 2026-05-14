@@ -47,10 +47,6 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
-/**
- * @author Brady
- * @since 7/31/2018
- */
 public class Baritone implements IBaritone {
 
     private static final ThreadPoolExecutor threadPool;
@@ -81,6 +77,8 @@ public class Baritone implements IBaritone {
     private final HungerHealthProcess hungerHealthProcess;
     private final SleepProcess sleepProcess;
     private final DeathRecoveryProcess deathRecoveryProcess;
+    private final FoodAcquisitionProcess foodAcquisitionProcess;
+    private final WorldStateTracker worldStateTracker;
 
     private final PathingControlManager pathingControlManager;
     private final SelectionManager selectionManager;
@@ -102,7 +100,6 @@ public class Baritone implements IBaritone {
             } catch (IOException ignored) {}
         }
 
-        // Define this before behaviors try and get it, or else it will be null and the builds will fail!
         this.playerContext = new BaritonePlayerContext(this, mc);
 
         {
@@ -117,7 +114,7 @@ public class Baritone implements IBaritone {
         {
             this.followProcess           = this.registerProcess(FollowProcess::new);
             this.mineProcess             = this.registerProcess(MineProcess::new);
-            this.customGoalProcess       = this.registerProcess(CustomGoalProcess::new); // very high iq
+            this.customGoalProcess       = this.registerProcess(CustomGoalProcess::new);
             this.getToBlockProcess       = this.registerProcess(GetToBlockProcess::new);
             this.builderProcess          = this.registerProcess(BuilderProcess::new);
             this.exploreProcess          = this.registerProcess(ExploreProcess::new);
@@ -127,6 +124,8 @@ public class Baritone implements IBaritone {
             this.hungerHealthProcess     = this.registerProcess(HungerHealthProcess::new);
             this.sleepProcess            = this.registerProcess(SleepProcess::new);
             this.deathRecoveryProcess    = this.registerProcess(DeathRecoveryProcess::new);
+            this.foodAcquisitionProcess  = this.registerProcess(FoodAcquisitionProcess::new);
+            this.worldStateTracker       = this.registerProcess(WorldStateTracker::new);
             this.registerProcess(BackfillProcess::new);
         }
 
@@ -224,6 +223,14 @@ public class Baritone implements IBaritone {
 
     public DeathRecoveryProcess getDeathRecoveryProcess() {
         return this.deathRecoveryProcess;
+    }
+
+    public FoodAcquisitionProcess getFoodAcquisitionProcess() {
+        return this.foodAcquisitionProcess;
+    }
+
+    public WorldStateTracker getWorldStateTracker() {
+        return this.worldStateTracker;
     }
 
     @Override
