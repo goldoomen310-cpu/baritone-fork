@@ -41,8 +41,6 @@ import net.minecraft.client.Minecraft;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -80,6 +78,9 @@ public class Baritone implements IBaritone {
     private final FarmProcess farmProcess;
     private final InventoryPauserProcess inventoryPauserProcess;
     private final IElytraProcess elytraProcess;
+    private final HungerHealthProcess hungerHealthProcess;
+    private final SleepProcess sleepProcess;
+    private final DeathRecoveryProcess deathRecoveryProcess;
 
     private final PathingControlManager pathingControlManager;
     private final SelectionManager selectionManager;
@@ -123,6 +124,9 @@ public class Baritone implements IBaritone {
             this.farmProcess             = this.registerProcess(FarmProcess::new);
             this.inventoryPauserProcess  = this.registerProcess(InventoryPauserProcess::new);
             this.elytraProcess           = this.registerProcess(ElytraProcess::create);
+            this.hungerHealthProcess     = this.registerProcess(HungerHealthProcess::new);
+            this.sleepProcess            = this.registerProcess(SleepProcess::new);
+            this.deathRecoveryProcess    = this.registerProcess(DeathRecoveryProcess::new);
             this.registerProcess(BackfillProcess::new);
         }
 
@@ -208,6 +212,18 @@ public class Baritone implements IBaritone {
 
     public InventoryPauserProcess getInventoryPauserProcess() {
         return this.inventoryPauserProcess;
+    }
+
+    public HungerHealthProcess getHungerHealthProcess() {
+        return this.hungerHealthProcess;
+    }
+
+    public SleepProcess getSleepProcess() {
+        return this.sleepProcess;
+    }
+
+    public DeathRecoveryProcess getDeathRecoveryProcess() {
+        return this.deathRecoveryProcess;
     }
 
     @Override
